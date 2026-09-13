@@ -11,7 +11,7 @@ interface LineItem {
 }
 
 export default function InvoiceGenerator() {
-  const [company, setCompany] = useState('DevToolkit Inc.');
+  const [company, setCompany] = useState('MyToolMate Inc.');
   const [client, setClient] = useState('Acme Corp');
   const [items, setItems] = useState<LineItem[]>([{ description: 'Web Development', qty: 10, rate: 100 }]);
   const [taxRate, setTaxRate] = useState(10);

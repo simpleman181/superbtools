@@ -151,7 +151,7 @@ export default function Navbar() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
           <Code2 className="h-6 w-6 text-primary" />
-          <span>DevToolkit</span>
+          <span>MyToolMate</span>
         </Link>
 
         <button className="md:hidden" onClick={() => setMobileOpen(!mobileOpen)}>

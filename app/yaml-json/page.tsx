@@ -110,7 +110,7 @@ function convertToYaml(obj: any, indent: number): string {
 }
 
 export default function YamlJson() {
-  const [input, setInput] = useState('name: DevToolkit\nversion: 1.0\nfeatures:\n  - JSON\n  - YAML\n  - CSV');
+  const [input, setInput] = useState('name: MyToolMate\nversion: 1.0\nfeatures:\n  - JSON\n  - YAML\n  - CSV');
   const [mode, setMode] = useState<'yaml-to-json' | 'json-to-yaml'>('yaml-to-json');
   const [output, setOutput] = useState('');
   const [error, setError] = useState('');

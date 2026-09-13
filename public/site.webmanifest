@@ -1,7 +1,7 @@
 {
-  "name": "DevToolkit - Developer Utilities",
-  "short_name": "DevToolkit",
-  "description": "A collection of essential developer utilities",
+  "name": "MyToolMate - Developer Utilities",
+  "short_name": "MyToolMate",
+  "description": "A collection of essential developer tools",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

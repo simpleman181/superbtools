@@ -6,7 +6,7 @@ import Navbar from "@/components/navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DevToolkit - Developer Utilities",
+  title: "MyToolMate - Developer Utilities",
   description: "A collection of essential developer utilities — JSON formatter, password generator, UUID generator, and 70+ more free tools.",
   manifest: "/site.webmanifest",
   icons: {
@@ -24,15 +24,15 @@ export const metadata: Metadata = {
   },
   themeColor: "#3b82f6",
   openGraph: {
-    title: "DevToolkit - Developer Utilities",
+    title: "MyToolMate - Developer Utilities",
     description: "70+ free developer tools — JSON, Base64, UUID, Password Generator, and more.",
     url: "https://superbtools.vercel.app",
-    siteName: "DevToolkit",
+    siteName: "MyToolMate",
     type: "website",
   },
   twitter: {
     card: "summary",
-    title: "DevToolkit - Developer Utilities",
+    title: "MyToolMate - Developer Utilities",
     description: "70+ free developer tools — JSON, Base64, UUID, Password Generator, and more.",
   },
 };

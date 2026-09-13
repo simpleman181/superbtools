@@ -279,7 +279,7 @@ function formatSQL(sql: string, indent: string, uppercase: boolean): string {
       return true;
     })();
     if (needsSpace) lineTokens.push(' ');
-    lineTokens.push(tok.type === 'keyword' ? kw(tok.value) : tok.value);
+    lineTokens.push(tok.value);
   }
 
   flush();

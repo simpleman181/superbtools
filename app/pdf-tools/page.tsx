@@ -36,7 +36,7 @@ export default function PdfTools() {
       }
       setStatus('Saving...');
       const out = await merged.save();
-      const blob = new Blob([out], { type: 'application/pdf' });
+      const blob = new Blob([out as unknown as BlobPart], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = 'merged.pdf'; a.click();
@@ -74,7 +74,7 @@ export default function PdfTools() {
       const pages = await newDoc.copyPages(doc, valid);
       pages.forEach(p => newDoc.addPage(p));
       const out = await newDoc.save();
-      const blob = new Blob([out], { type: 'application/pdf' });
+      const blob = new Blob([out as unknown as BlobPart], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url; a.download = `split-pages-${splitRange.replace(/,/g,'-')}.pdf`; a.click();

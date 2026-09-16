@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Network } from "lucide-react";
 

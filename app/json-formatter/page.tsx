@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { FileJson, Copy, Check, AlertCircle } from "lucide-react";
 

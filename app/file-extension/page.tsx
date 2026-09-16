@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { FileText, Copy, Check } from "lucide-react";
 

@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useEffect } from "react";
 import { Hash, Copy, Check } from "lucide-react";
 import CryptoJS from "crypto-js";

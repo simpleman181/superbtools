@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useMemo } from "react";
 import { AlignLeft } from "lucide-react";
 

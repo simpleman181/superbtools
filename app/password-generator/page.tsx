@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Lock, Copy, Check, RefreshCw } from "lucide-react";
 

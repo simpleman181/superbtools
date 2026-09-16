@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Sigma } from "lucide-react";
 
@@ -9,6 +7,12 @@ export default function MathRenderer() {
 
   const renderSimple = (input: string) => {
     let html = input
+      // Superscripts and subscripts FIRST so they render correctly inside \sqrt{} and \frac{}
+      .replace(/\^\{([^}]+)\}/g, '<sup>$1</sup>')
+      .replace(/\^([a-zA-Z0-9])/g, '<sup>$1</sup>')
+      .replace(/_\{([^}]+)\}/g, '<sub>$1</sub>')
+      .replace(/_([a-zA-Z0-9])/g, '<sub>$1</sub>')
+      // Structural commands — run after super/subscripts so $1 captures already-rendered HTML
       .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '<span class="inline-flex flex-col items-center align-middle mx-1"><span class="border-b px-1">$1</span><span class="px-1">$2</span></span>')
       .replace(/\\sqrt\{([^}]+)\}/g, '<span class="inline-flex items-start"><span class="text-lg">√</span><span class="border-t pt-0.5 px-0.5">$1</span></span>')
       .replace(/\\pm/g, '±')

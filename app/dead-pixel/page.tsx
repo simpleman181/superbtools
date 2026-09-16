@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Monitor, Maximize2 } from "lucide-react";
 

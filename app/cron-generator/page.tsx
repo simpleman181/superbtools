@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Timer, Copy, Check } from "lucide-react";
 

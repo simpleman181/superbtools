@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useRef } from "react";
 import { ImageIcon, Download, Shield } from "lucide-react";
 

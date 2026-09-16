@@ -1,8 +1,12 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { Calculator, Download } from "lucide-react";
+
+
+const fmt = (n: number) =>
+  n.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+const fmtDec = (n: number) =>
+  n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export default function EmiCalculator() {
   const [principal, setPrincipal] = useState(100000);
@@ -51,15 +55,15 @@ export default function EmiCalculator() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="rounded-lg border bg-card p-4 text-center">
-          <div className="text-2xl font-bold text-primary">{emi.toFixed(0)}</div>
+          <div className="text-2xl font-bold text-primary">{fmt(emi)}</div>
           <div className="text-xs text-muted-foreground mt-1">Monthly EMI</div>
         </div>
         <div className="rounded-lg border bg-card p-4 text-center">
-          <div className="text-2xl font-bold">{totalInterest.toFixed(0)}</div>
+          <div className="text-2xl font-bold">{fmt(totalInterest)}</div>
           <div className="text-xs text-muted-foreground mt-1">Total Interest</div>
         </div>
         <div className="rounded-lg border bg-card p-4 text-center">
-          <div className="text-2xl font-bold">{totalPayment.toFixed(0)}</div>
+          <div className="text-2xl font-bold">{fmt(totalPayment)}</div>
           <div className="text-xs text-muted-foreground mt-1">Total Payment</div>
         </div>
       </div>

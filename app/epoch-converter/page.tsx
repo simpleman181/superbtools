@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useEffect } from "react";
 import { Clock, Copy, Check, ArrowRightLeft } from "lucide-react";
 

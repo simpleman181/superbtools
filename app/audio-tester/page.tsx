@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useRef, useEffect } from "react";
 import { Volume2, Play, Square } from "lucide-react";
 

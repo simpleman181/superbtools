@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState } from "react";
 import { PenTool, Copy, Check } from "lucide-react";
 

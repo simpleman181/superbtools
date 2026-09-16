@@ -1,6 +1,4 @@
 'use client';
-"use client";
-
 import { useState, useMemo } from "react";
 import { Regex, Copy, Check } from "lucide-react";
 

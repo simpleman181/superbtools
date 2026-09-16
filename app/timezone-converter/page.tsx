@@ -1,7 +1,5 @@
 'use client';
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Globe, Clock } from "lucide-react";
 
 const timezones = [
@@ -12,7 +10,11 @@ const timezones = [
 ];
 
 export default function TimezoneConverter() {
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 16));
+  const [date, setDate] = useState('');
+
+  useEffect(() => {
+    setDate(new Date().toISOString().slice(0, 16));
+  }, []);
   const [fromZone, setFromZone] = useState('UTC');
   const [toZones, setToZones] = useState(['America/New_York', 'Europe/London', 'Asia/Tokyo']);
 

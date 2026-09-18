@@ -4,6 +4,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const BASE = 'https://www.mytoolmate.top';
 
   const tools = [
+  '/about',
+  '/contact',
+  '/privacy-policy',
+  '/terms',
+  '/disclaimer',
+  '/cookie-policy',
     '/age-calculator',
     '/ascii-art',
     '/audio-tester',

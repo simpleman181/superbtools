@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Code2, Menu, X } from "lucide-react";
+import { FileText, Code2, Menu, X } from "lucide-react";
 
 const categories = [
   {
@@ -139,6 +139,34 @@ const categories = [
       { name: "File Extension", href: "/file-extension" },
       { name: "AV Converter", href: "/av-converter" },
       { name: "PDF Tools", href: "/pdf-tools" },
+    ],
+  },
+  {
+    title: "PDF Tools",
+    tools: [
+      { name: "Merge & Split", href: "/pdf-tools" },
+      { name: "Rotate PDF", href: "/pdf-rotate" },
+      { name: "Delete Pages", href: "/pdf-delete-pages" },
+      { name: "Watermark PDF", href: "/pdf-watermark" },
+      { name: "Page Numbers", href: "/pdf-page-numbers" },
+      { name: "Protect PDF", href: "/pdf-protect" },
+      { name: "Unlock PDF", href: "/pdf-unlock" },
+      { name: "Flatten PDF", href: "/pdf-flatten" },
+      { name: "Crop PDF", href: "/pdf-crop" },
+      { name: "Redact PDF", href: "/pdf-redact" },
+      { name: "Image to PDF", href: "/image-to-pdf" },
+      { name: "TXT to PDF", href: "/txt-to-pdf" },
+      { name: "CSV to PDF", href: "/csv-to-pdf" },
+      { name: "PDF Viewer", href: "/pdf-viewer" },
+      { name: "PDF to Image", href: "/pdf-to-image" },
+      { name: "Organise PDF", href: "/pdf-organise" },
+      { name: "HTML to PDF", href: "/html-to-pdf" },
+      { name: "Compress PDF", href: "/pdf-compress" },
+      { name: "Sign PDF", href: "/pdf-sign" },
+      { name: "Form Filler", href: "/pdf-form" },
+      { name: "Word to PDF", href: "/word-to-pdf" },
+      { name: "Excel to PDF", href: "/excel-to-pdf" },
+      { name: "PDF OCR", href: "/pdf-ocr" },
     ],
   },
 ];

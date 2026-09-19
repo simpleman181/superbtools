@@ -15,14 +15,18 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "html2canvas": "^1.4.1",
     "lucide-react": "^0.400.0",
+    "mammoth": "^1.12.3",
     "next": "14.2.29",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.3.289",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
     "remark-gfm": "^4.0.0",
-    "tailwind-merge": "^2.3.0"
+    "tailwind-merge": "^2.3.0",
+    "tesseract.js": "^7.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.9",

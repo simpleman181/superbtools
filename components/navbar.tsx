@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Code2, Menu, X, ChevronDown } from "lucide-react";
 
 const categories = [
@@ -141,45 +141,86 @@ const categories = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openCat, setOpenCat] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenCat(null);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggleCat = (title: string) => {
+    setOpenCat(prev => prev === title ? null : title);
+  };
+
+  const dropdownWidth = (count: number) => {
+    if (count >= 20) return "w-[540px]";
+    if (count >= 10) return "w-64";
+    return "w-52";
+  };
+
+  const dropdownCols = (count: number) => {
+    if (count >= 20) return "grid grid-cols-3 gap-0.5";
+    return "flex flex-col gap-0.5";
+  };
 
   return (
-    <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <nav ref={navRef} className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl flex-shrink-0">
-          <Code2 className="h-6 w-6 text-primary" />
+
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2 font-bold text-xl flex-shrink-0 mr-4" onClick={() => setOpenCat(null)}>
+          <Code2 className="h-5 w-5 text-primary" />
           <span>MyToolMate</span>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-0.5 overflow-x-auto">
+        <div className="hidden md:flex items-center gap-0 overflow-x-auto flex-1">
           {categories.map((cat) => (
-            <div key={cat.title} className="relative group flex-shrink-0">
-              <button className="flex items-center gap-1 px-2.5 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-md hover:bg-accent transition-colors whitespace-nowrap">
+            <div key={cat.title} className="relative flex-shrink-0">
+              <button
+                onClick={() => toggleCat(cat.title)}
+                className={`flex items-center gap-1 px-2.5 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                  openCat === cat.title
+                    ? "bg-accent text-accent-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                }`}
+              >
                 {cat.title}
-                <ChevronDown className="h-3 w-3 opacity-60" />
+                <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${openCat === cat.title ? "rotate-180" : ""}`} />
               </button>
-              {/* Dropdown — wide grid for PDF Studio & Developer */}
-              <div className={`absolute top-full left-0 mt-1 rounded-xl border bg-popover shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 ${
-                cat.tools.length > 12 ? 'w-[520px]' : cat.tools.length > 6 ? 'w-64' : 'w-48'
-              }`}>
-                <div className={`p-2 ${cat.tools.length > 12 ? 'grid grid-cols-3 gap-0.5' : 'flex flex-col gap-0.5'}`}>
-                  {cat.tools.map((tool) => (
-                    <Link
-                      key={tool.href}
-                      href={tool.href}
-                      className="px-3 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-                    >
-                      {tool.name}
-                    </Link>
-                  ))}
+
+              {openCat === cat.title && (
+                <div className={`absolute top-full left-0 mt-1 rounded-xl border bg-popover shadow-xl z-50 ${dropdownWidth(cat.tools.length)}`}>
+                  <div className={`p-2 max-h-[70vh] overflow-y-auto ${dropdownCols(cat.tools.length)}`}>
+                    {cat.tools.map((tool) => (
+                      <Link
+                        key={tool.href}
+                        href={tool.href}
+                        onClick={() => setOpenCat(null)}
+                        className="px-3 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors block"
+                      >
+                        {tool.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ))}
         </div>
 
         {/* Mobile hamburger */}
-        <button className="md:hidden p-1" onClick={() => setMobileOpen(!mobileOpen)}>
+        <button
+          className="md:hidden p-1.5 rounded-md hover:bg-accent"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle menu"
+        >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
@@ -194,15 +235,15 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-foreground"
               >
                 {cat.title}
-                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${openCat === cat.title ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openCat === cat.title ? "rotate-180" : ""}`} />
               </button>
               {openCat === cat.title && (
-                <div className={`px-4 pb-3 ${cat.tools.length > 8 ? 'grid grid-cols-2 gap-0.5' : 'flex flex-col gap-0.5'}`}>
+                <div className={`px-4 pb-3 ${cat.tools.length > 8 ? "grid grid-cols-2 gap-0.5" : "flex flex-col gap-0.5"}`}>
                   {cat.tools.map((tool) => (
                     <Link
                       key={tool.href}
                       href={tool.href}
-                      onClick={() => setMobileOpen(false)}
+                      onClick={() => { setMobileOpen(false); setOpenCat(null); }}
                       className="block px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                     >
                       {tool.name}

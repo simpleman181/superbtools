@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
-import { Code2, Menu, X, ChevronDown } from "lucide-react";
+import { Code2, Menu, X, ChevronDown, Search } from "lucide-react";
 
 const categories = [
   {
     title: "PDF Studio",
+    cols: 3,
     tools: [
       { name: "Merge & Split", href: "/pdf-tools" },
       { name: "PDF Viewer", href: "/pdf-viewer" },
@@ -34,7 +35,8 @@ const categories = [
     ],
   },
   {
-    title: "Image, Media & Design",
+    title: "Image & Design",
+    cols: 1,
     tools: [
       { name: "Image Converter", href: "/image-converter" },
       { name: "Image Resizer", href: "/image-resizer" },
@@ -49,6 +51,7 @@ const categories = [
   },
   {
     title: "Text & Writing",
+    cols: 1,
     tools: [
       { name: "Case Converter", href: "/case-converter" },
       { name: "Word Counter", href: "/word-counter" },
@@ -62,7 +65,8 @@ const categories = [
     ],
   },
   {
-    title: "Developer & Network",
+    title: "Developer",
+    cols: 3,
     tools: [
       { name: "JSON Formatter", href: "/json-formatter" },
       { name: "YAML↔JSON", href: "/yaml-json" },
@@ -94,7 +98,8 @@ const categories = [
     ],
   },
   {
-    title: "Calculators & Time",
+    title: "Calculators",
+    cols: 1,
     tools: [
       { name: "EMI Calculator", href: "/emi-calculator" },
       { name: "Compound Interest", href: "/compound-interest" },
@@ -111,7 +116,8 @@ const categories = [
     ],
   },
   {
-    title: "Security & Privacy",
+    title: "Security",
+    cols: 1,
     tools: [
       { name: "Password Generator", href: "/password-generator" },
       { name: "Password Entropy", href: "/password-entropy" },
@@ -123,6 +129,7 @@ const categories = [
   },
   {
     title: "Productivity",
+    cols: 1,
     tools: [
       { name: "Invoice Generator", href: "/invoice-generator" },
       { name: "Time Card", href: "/time-card" },
@@ -138,87 +145,147 @@ const categories = [
   },
 ];
 
+// Flat list for search
+const allTools = categories.flatMap(c => c.tools.map(t => ({ ...t, category: c.title })));
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openCat, setOpenCat] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
-  // Close dropdown when clicking outside
+  // Close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setOpenCat(null);
+        setShowSearch(false);
+        setSearchQuery("");
       }
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const toggleCat = (title: string) => {
-    setOpenCat(prev => prev === title ? null : title);
-  };
+  // Focus search input when shown
+  useEffect(() => {
+    if (showSearch) searchRef.current?.focus();
+  }, [showSearch]);
 
-  const dropdownWidth = (count: number) => {
-    if (count >= 20) return "w-[540px]";
-    if (count >= 10) return "w-64";
-    return "w-52";
-  };
+  const close = () => { setOpenCat(null); setShowSearch(false); setSearchQuery(""); };
 
-  const dropdownCols = (count: number) => {
-    if (count >= 20) return "grid grid-cols-3 gap-0.5";
-    return "flex flex-col gap-0.5";
-  };
+  const searchResults = searchQuery.length > 1
+    ? allTools.filter(t =>
+        t.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        t.category.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 12)
+    : [];
 
   return (
     <nav ref={navRef} className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 gap-2">
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-xl flex-shrink-0 mr-4" onClick={() => setOpenCat(null)}>
+        <Link href="/" onClick={close}
+          className="flex items-center gap-2 font-bold text-lg flex-shrink-0">
           <Code2 className="h-5 w-5 text-primary" />
-          <span>MyToolMate</span>
+          <span className="hidden sm:inline">MyToolMate</span>
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-0 overflow-x-auto flex-1">
-          {categories.map((cat) => (
-            <div key={cat.title} className="relative flex-shrink-0">
-              <button
-                onClick={() => toggleCat(cat.title)}
-                className={`flex items-center gap-1 px-2.5 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                  openCat === cat.title
-                    ? "bg-accent text-accent-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                }`}
-              >
-                {cat.title}
-                <ChevronDown className={`h-3 w-3 transition-transform duration-200 ${openCat === cat.title ? "rotate-180" : ""}`} />
-              </button>
+        <div className="hidden md:flex items-center gap-0 flex-1 overflow-x-auto">
+          {categories.map((cat) => {
+            const isOpen = openCat === cat.title;
+            return (
+              <div key={cat.title} className="relative flex-shrink-0">
+                <button
+                  onClick={() => setOpenCat(isOpen ? null : cat.title)}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
+                    isOpen ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                  }`}
+                >
+                  {cat.title}
+                  <ChevronDown className={`h-3 w-3 opacity-60 transition-transform duration-150 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
 
-              {openCat === cat.title && (
-                <div className={`absolute top-full left-0 mt-1 rounded-xl border bg-popover shadow-xl z-50 ${dropdownWidth(cat.tools.length)}`}>
-                  <div className={`p-2 max-h-[70vh] overflow-y-auto ${dropdownCols(cat.tools.length)}`}>
+                {/* Dropdown — always in DOM, toggled via style */}
+                <div
+                  style={{ display: isOpen ? "block" : "none" }}
+                  className={`absolute top-full left-0 mt-1 rounded-xl border bg-popover shadow-xl z-50 ${
+                    cat.cols === 3 ? "w-[480px]" : "w-52"
+                  }`}
+                >
+                  <div className={`p-2 max-h-[75vh] overflow-y-auto ${cat.cols === 3 ? "grid grid-cols-3 gap-0.5" : "flex flex-col gap-0.5"}`}>
                     {cat.tools.map((tool) => (
                       <Link
                         key={tool.href}
                         href={tool.href}
-                        onClick={() => setOpenCat(null)}
-                        className="px-3 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors block"
+                        onClick={close}
+                        className="block px-3 py-1.5 text-sm rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
                       >
                         {tool.name}
                       </Link>
                     ))}
                   </div>
                 </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Search button + panel */}
+        <div className="relative flex-shrink-0">
+          <button
+            onClick={() => { setShowSearch(v => !v); setOpenCat(null); }}
+            className="p-1.5 rounded-md hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Search tools"
+          >
+            <Search className="h-4 w-4" />
+          </button>
+
+          {showSearch && (
+            <div className="absolute right-0 top-full mt-1 w-72 rounded-xl border bg-popover shadow-xl z-50">
+              <div className="p-2">
+                <input
+                  ref={searchRef}
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search 100+ tools…"
+                  className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+              </div>
+              {searchQuery.length > 1 && (
+                <div className="px-2 pb-2 max-h-72 overflow-y-auto">
+                  {searchResults.length === 0 ? (
+                    <p className="text-xs text-muted-foreground text-center py-4">No tools found for "{searchQuery}"</p>
+                  ) : (
+                    searchResults.map(tool => (
+                      <Link
+                        key={tool.href}
+                        href={tool.href}
+                        onClick={close}
+                        className="flex items-center justify-between px-3 py-1.5 rounded-md text-sm hover:bg-accent transition-colors"
+                      >
+                        <span>{tool.name}</span>
+                        <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">{tool.category}</span>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              )}
+              {searchQuery.length === 0 && (
+                <p className="text-xs text-muted-foreground text-center pb-3">Type at least 2 characters to search</p>
               )}
             </div>
-          ))}
+          )}
         </div>
 
         {/* Mobile hamburger */}
         <button
+          onClick={() => { setMobileOpen(v => !v); setOpenCat(null); }}
           className="md:hidden p-1.5 rounded-md hover:bg-accent"
-          onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -228,29 +295,54 @@ export default function Navbar() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t bg-background max-h-[80vh] overflow-y-auto">
+          {/* Mobile search */}
+          <div className="px-4 py-3 border-b">
+            <input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search tools…"
+              className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            {searchQuery.length > 1 && (
+              <div className="mt-2 space-y-0.5">
+                {searchResults.length === 0 ? (
+                  <p className="text-xs text-muted-foreground py-2 text-center">No results</p>
+                ) : searchResults.map(tool => (
+                  <Link key={tool.href} href={tool.href}
+                    onClick={() => { setMobileOpen(false); close(); }}
+                    className="flex items-center justify-between px-3 py-1.5 rounded-md text-sm hover:bg-accent">
+                    <span>{tool.name}</span>
+                    <span className="text-xs text-muted-foreground">{tool.category}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Mobile categories */}
           {categories.map((cat) => (
             <div key={cat.title} className="border-b last:border-0">
               <button
                 onClick={() => setOpenCat(openCat === cat.title ? null : cat.title)}
-                className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold text-foreground"
+                className="w-full flex items-center justify-between px-4 py-3 text-sm font-semibold"
               >
                 {cat.title}
-                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openCat === cat.title ? "rotate-180" : ""}`} />
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-150 ${openCat === cat.title ? "rotate-180" : ""}`} />
               </button>
-              {openCat === cat.title && (
+              <div style={{ display: openCat === cat.title ? "block" : "none" }}>
                 <div className={`px-4 pb-3 ${cat.tools.length > 8 ? "grid grid-cols-2 gap-0.5" : "flex flex-col gap-0.5"}`}>
                   {cat.tools.map((tool) => (
                     <Link
                       key={tool.href}
                       href={tool.href}
-                      onClick={() => { setMobileOpen(false); setOpenCat(null); }}
+                      onClick={() => { setMobileOpen(false); close(); }}
                       className="block px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                     >
                       {tool.name}
                     </Link>
                   ))}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>

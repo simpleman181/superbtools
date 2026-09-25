@@ -119,10 +119,11 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => { setShowSearch(v => !v); setOpenCat(null); }}
-                className="p-1.5 rounded hover:bg-white/10 text-white/80 hover:text-white transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white/90 hover:text-white transition-colors text-sm border border-white/20"
                 aria-label="Search tools"
               >
-                <Search className="h-4 w-4" />
+                <Search className="h-4 w-4 flex-shrink-0" />
+                <span className="hidden lg:inline text-xs">Search tools</span>
               </button>
 
               {showSearch && (
